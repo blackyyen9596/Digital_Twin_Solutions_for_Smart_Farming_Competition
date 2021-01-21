@@ -3,7 +3,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.metrics import hamming_loss
 from sklearn.preprocessing import MultiLabelBinarizer
-from preprocessing import preprocessing as pre
 
 train_x = pd.read_csv(r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\train_x.csv')
 val_x = pd.read_csv(r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\val_x.csv')
@@ -17,7 +16,7 @@ train_x = ss.fit_transform(train_x)
 val_x = ss.transform(val_x)
 test_x = ss.transform(test_x)
 
-# 設定LinearSVR參數
+# 設定參數
 model = ExtraTreesClassifier()
 # 訓練模型
 model.fit(train_x, train_y)
