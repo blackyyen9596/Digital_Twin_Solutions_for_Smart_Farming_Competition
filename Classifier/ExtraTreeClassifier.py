@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import ExtraTreeClassifier
 from sklearn.metrics import hamming_loss
 from sklearn.preprocessing import MultiLabelBinarizer
 from preprocessing import preprocessing as pre
@@ -18,7 +18,7 @@ val_x = ss.transform(val_x)
 test_x = ss.transform(test_x)
 
 # 設定LinearSVR參數
-model = DecisionTreeClassifier()
+model = ExtraTreeClassifier()
 # 訓練模型
 model.fit(train_x, train_y)
 # 將驗證集丟入模型中進行預測
