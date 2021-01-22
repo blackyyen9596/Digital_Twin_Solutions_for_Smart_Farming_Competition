@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from pandas import DataFrame
 from tqdm import tqdm
@@ -38,9 +39,6 @@ df_train = DataFrame(train_data).reset_index(drop=True)
 df_val = DataFrame(val_data).reset_index(drop=True)
 
 # 輸出train.csv與val.csv檔案
-df_train.to_csv(
-    r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\dataset_partition\train.csv'
-)  #生成訓練資料路徑
-df_val.to_csv(
-    r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\dataset_partition\val.csv'
-)  #生成驗證資料路徑
+save_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset_partition'
+df_train.to_csv(os.path.join(save_path, 'train.csv'))  #生成訓練資料路徑
+df_val.to_csv(os.path.join(save_path, 'val.csv'))  #生成驗證資料路徑

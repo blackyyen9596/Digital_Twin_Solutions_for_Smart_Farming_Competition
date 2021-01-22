@@ -1,32 +1,31 @@
+import os
+import gc
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-import gc
 
 
 def preprocessing():
     # 讀取資料集
+    read_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset_partition'
     train_data = pd.read_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\dataset_partition\train.csv',
+        os.path.join(read_path, 'train.csv'),
         index_col=0,
-        encoding='utf-8',
     )
     val_data = pd.read_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\dataset_partition\val.csv',
+        os.path.join(read_path, 'val.csv'),
         index_col=0,
-        encoding='utf-8',
     )
     test_data = pd.read_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\org\test_data.csv',
+        os.path.join(read_path, 'test.csv'),
         index_col=0,
-        encoding='utf-8',
     )
-    y_feature = [
+    label_feature = [
         'actuator01', 'actuator02', 'actuator03', 'actuator04', 'actuator05',
         'actuator06', 'actuator07', 'actuator08', 'actuator09', 'actuator10',
         'actuator11'
     ]
-    test_data[y_feature] = -1
+    test_data[label_feature] = -1
     data = pd.concat((train_data, val_data, test_data)).reset_index(drop=True)
     month_list, time_list = [], []
     for log_time in data['d.log_time']:
@@ -50,35 +49,32 @@ def preprocessing():
         data = pd.concat([data, data_new], axis=1)
     data.drop(cate_feature, axis=1, inplace=True)
 
-    train_val = data[data[y_feature[0]] != -1]
-    test = data[data[y_feature[0]] == -1]
+    train_val = data[data[label_feature[0]] != -1]
+    test = data[data[label_feature[0]] == -1]
 
     # 清理內存
     del data, val_data, test_data
     gc.collect()
 
-    x_features = [i for i in train_val.columns if i not in y_feature]
+    data_feature = [i for i in train_val.columns if i not in label_feature]
     index = ['index']
-    x_features = list(set(x_features) - set(index))
+    data_feature = list(set(data_feature) - set(index))
     # 將資料劃分為訓練集與測試集
-    train_x = train_val[x_features][:train_data.shape[0]].reset_index(
+    train_data = train_val[data_feature][:train_data.shape[0]].reset_index(
         drop=True)
-    val_x = train_val[x_features][train_data.shape[0]:].reset_index(drop=True)
-    test_x = test[x_features].reset_index(drop=True)
-    train_y = train_val[y_feature][:train_data.shape[0]].astype(
+    val_data = train_val[data_feature][train_data.shape[0]:].reset_index(
+        drop=True)
+    test_data = test[data_feature].reset_index(drop=True)
+    train_label = train_val[label_feature][:train_data.shape[0]].astype(
         int).reset_index(drop=True)
-    val_y = train_val[y_feature][train_data.shape[0]:].astype(int).reset_index(
-        drop=True)
-    train_x.to_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\inputs_and_target\train_x.csv')
-    val_x.to_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\inputs_and_target\val_x.csv')
-    test_x.to_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\inputs_and_target\test_x.csv')
-    train_y.to_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\inputs_and_target\train_y.csv')
-    val_y.to_csv(
-        r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset\inputs_and_target\val_y.csv')
+    val_label = train_val[label_feature][train_data.shape[0]:].astype(
+        int).reset_index(drop=True)
+    save_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
+    train_data.to_csv(os.path.join(save_path, 'train_data.csv'))
+    val_data.to_csv(os.path.join(save_path, 'val_data.csv'))
+    test_data.to_csv(os.path.join(save_path, 'test_data.csv'))
+    train_label.to_csv(os.path.join(save_path, 'train_label.csv'))
+    val_label.to_csv(os.path.join(save_path, 'val_label.csv'))
 
 
 if __name__ == "__main__":

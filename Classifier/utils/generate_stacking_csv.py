@@ -1,14 +1,16 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import hamming_loss
+from sklearn.metrics import f1_score, hamming_loss
 from tqdm import tqdm
 
 
 def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
                           model_name, model):
-    kf = KFold(n_splits=10, shuffle=False)
+    k = 100
+    kf = KFold(n_splits=k, shuffle=False)
     fold = 0
     train_list = []
     val_dic, test_dic = {}, {}
@@ -40,8 +42,8 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
         list = []
 
     xgb_train = pd.DataFrame(xgb_train)
-    xgb_train.to_csv('{}.csv'.format(save_path + 'train/' + model_name +
-                                     '_train'))
+    xgb_train.to_csv('{}.csv'.format(
+        os.path.join(save_path, 'train/' + model_name + '_train')))
 
     # 生成新的驗證集
     total_out = 0
@@ -51,7 +53,7 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
         total_out += val_dic[model_name + str(i + 1)]
     for i in range(total_out.shape[0]):
         for j in range(total_out.shape[1]):
-            if total_out[i][j] > 5:
+            if total_out[i][j] >= int(k // 2):
                 list.append(1)
             else:
                 list.append(0)
@@ -65,7 +67,8 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
         list = []
 
     xgb_val = pd.DataFrame(xgb_val)
-    xgb_val.to_csv('{}.csv'.format(save_path + 'val/' + model_name + '_val'))
+    xgb_val.to_csv('{}.csv'.format(
+        os.path.join(save_path, 'val/' + model_name + '_val')))
 
     # 生成新的測試集
     total_out = 0
@@ -75,7 +78,7 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
         total_out += test_dic[model_name + str(i + 1)]
     for i in range(total_out.shape[0]):
         for j in range(total_out.shape[1]):
-            if total_out[i][j] > 5:
+            if total_out[i][j] >= int(k // 2):
                 list.append(1)
             else:
                 list.append(0)
@@ -89,8 +92,9 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
         list = []
 
     xgb_test = pd.DataFrame(xgb_test)
-    xgb_test.to_csv('{}.csv'.format(save_path + 'test/' + model_name +
-                                    '_test'))
+    xgb_test.to_csv('{}.csv'.format(
+        os.path.join(save_path, 'test/' + model_name + '_test')))
 
     # 輸出模型評估指標
+    print('f1_score:', round(f1_score(val_y, xgb_val, average="macro"), 4))
     print('hamming_loss:', round(hamming_loss(val_y, xgb_val), 4))
