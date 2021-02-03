@@ -26,6 +26,6 @@ class rnn(nn.Module):
         output = self.drop_1(output)
         output, (h_n, c_n) = self.Seq_2(output)
         output = self.drop_2(output)
-        output = self.linear_1(output)
+        output = self.linear_1(output[-1])
         output = self.linear_2(output)
         return output
