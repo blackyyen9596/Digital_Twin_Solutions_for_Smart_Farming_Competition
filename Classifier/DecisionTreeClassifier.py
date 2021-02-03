@@ -2,12 +2,12 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import f1_score, hamming_loss
-from utils.generate_stacking_csv import generate_stacking_csv
+from utils.utils import generate_stacking_csv
 
 use_stacking = True
 
 csv_file = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
-save_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\stacking'
+save_path = r'.\stacking'
 model_name = r'DecisionTreeClassifier'
 train_x = pd.read_csv(csv_file + r'\train_data.csv', index_col=0)
 val_x = pd.read_csv(csv_file + r'\val_data.csv', index_col=0)

@@ -16,6 +16,4 @@ for set in sets:
     df7 = pd.read_csv(os.path.join(file_path, file_name[6]), index_col=0)
 
     data = pd.concat((df1, df2, df3, df4, df5, df6, df7), axis=1)
-    data.to_csv(
-        os.path.join(r'D:\dataset\2021智慧農業數位分身創新應用競賽\stacking\xgboost',
-                     str(set) + '.csv'))
+    data.to_csv(os.path.join(r'.\stacking\xgboost', str(set) + '.csv'))
