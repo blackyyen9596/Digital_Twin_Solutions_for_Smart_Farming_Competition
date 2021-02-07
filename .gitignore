@@ -2,3 +2,5 @@
 __pycache__
 stacking
 results
+logs
+weights

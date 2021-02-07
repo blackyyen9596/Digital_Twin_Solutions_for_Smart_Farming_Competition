@@ -32,7 +32,7 @@ data = x_scaler.transform(data)
 all_df.iloc[:, 1:data_num] = data
 
 # 前10個時間點(包含當下)當做訓練資料，若遇到nan則跳過
-n = 288
+n = 10
 train_data = []
 train_label = []
 test_data = []

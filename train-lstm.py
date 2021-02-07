@@ -34,9 +34,9 @@ else:
 # 參數設計
 # batch_size = data.shape[0]
 batch_size = 2000
-epochs = 100
+epochs = 200
 train_rate = 0.8  # 訓練資料集的比例
-lr = 1e-3
+lr = 1e-4
 threshold = torch.tensor([0.5])
 
 # 切割訓練驗證集
@@ -48,8 +48,8 @@ val_y = torch.tensor(label[train_num:])
 trainset = Setloader(train_x, train_y)
 valset = Setloader(val_x, val_y)
 
-trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True)
-valloader = DataLoader(valset, batch_size=batch_size, shuffle=True)
+trainloader = DataLoader(trainset, batch_size=len(trainset), shuffle=True)
+valloader = DataLoader(valset, batch_size=len(trainset), shuffle=True)
 
 # 定義模型
 model = rnn.rnn(input_size=18, output_size=11)
@@ -64,7 +64,7 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
 # scheduler = lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.9)
 scheduler = lr_scheduler.CosineAnnealingLR(optimizer,
                                            T_max=epochs,
-                                           eta_min=1e-5,
+                                           eta_min=1e-6,
                                            last_epoch=-1)
 
 loss_list = []
@@ -95,7 +95,7 @@ for epoch in range(1, epochs + 1):
                     'lr': optimizer.state_dict()['param_groups'][0]['lr']
                 })
             pbar.update(1)
-    # scheduler.step()
+    scheduler.step()
 
     #評估模式
     model.eval()
