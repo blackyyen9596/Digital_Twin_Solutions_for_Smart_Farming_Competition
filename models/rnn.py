@@ -14,8 +14,8 @@ class rnn(nn.Module):
                             num_layers=1,
                             batch_first=False,
                             bidirectional=True)
-        self.drop_1 = nn.Dropout(0.5)
-        self.drop_2 = nn.Dropout(0.5)
+        self.drop_1 = nn.Dropout(0.2)
+        self.drop_2 = nn.Dropout(0.2)
         self.Seq_1 = nn.Sequential(nn.ReLU(), self.rnn1)
         self.Seq_2 = nn.Sequential(nn.ReLU(), self.rnn2)
         self.linear_1 = nn.Sequential(nn.Linear(256, 64))
@@ -27,7 +27,7 @@ class rnn(nn.Module):
         output = self.drop_1(output)
         output, (h_n, c_n) = self.Seq_2(output)
         output = self.drop_2(output)
-        output = self.linear_1(output[-1])
+        output = self.linear_1(output)
         output = self.linear_2(output)
-        output = self.sigmoid(output)
+        output = self.sigmoid(output[-1])
         return output
