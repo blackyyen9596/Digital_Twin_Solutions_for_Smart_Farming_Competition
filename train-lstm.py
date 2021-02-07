@@ -33,7 +33,7 @@ else:
 
 # 參數設計
 # batch_size = data.shape[0]
-batch_size = 15000
+batch_size = 2000
 epochs = 100
 train_rate = 0.8  # 訓練資料集的比例
 lr = 1e-3
@@ -61,11 +61,11 @@ model.to(device)
 # 定義優化器、損失函數
 criterion = nn.MSELoss().to(device)
 optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
-scheduler = lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.9)
-# scheduler = lr_scheduler.CosineAnnealingLR(optimizer,
-#                                            T_max=20,
-#                                            eta_min=1e-6,
-#                                            last_epoch=-1)
+# scheduler = lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.9)
+scheduler = lr_scheduler.CosineAnnealingLR(optimizer,
+                                           T_max=epochs,
+                                           eta_min=1e-5,
+                                           last_epoch=-1)
 
 loss_list = []
 val_loss_list = []
@@ -135,7 +135,7 @@ for epoch in range(1, epochs + 1):
 plt.figure()
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
-plt.plot(loss_list, label='Loss')
+plt.plot(loss_list, label='Train Loss')
 plt.plot(val_loss_list, label='Val Loss')
 plt.legend(loc='best')
 plt.savefig('./images/loss.jpg')
