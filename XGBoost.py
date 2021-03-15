@@ -6,6 +6,10 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import f1_score, hamming_loss
 from sklearn.decomposition import PCA
+
+if not os.path.isdir('./results'):
+    os.mkdir('./results')
+
 args = {
     'learning_rate': 0.01,
     'n_estimators': 1000,
@@ -25,7 +29,7 @@ args = {
 
 clf_multilabel = OneVsRestClassifier(XGBClassifier(**args))
 
-csv_file = r'D:\dataset\2021智慧農業數位分身創新應用競賽\stacking\xgboost'
+csv_file = r'.\stacking\xgboost'
 label_file = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
 train_data = pd.read_csv(
     os.path.join(csv_file, 'train.csv'),
@@ -62,7 +66,7 @@ test_pres.columns = [
     'actuator06', 'actuator07', 'actuator08', 'actuator09', 'actuator10',
     'actuator11'
 ]
-test_pres.to_csv(r'D:\dataset\2021智慧農業數位分身創新應用競賽\results\result_012321.csv')
+test_pres.to_csv(r'.\results\result_031521.csv')
 
 # 輸出模型評估指標
 print('f1_score:', round(f1_score(val_label, val_pred, average="macro"), 4))

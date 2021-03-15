@@ -25,9 +25,10 @@ val_y = val_y.values
 
 # 設定參數
 model = ExtraTreeClassifier()
+k = 10
 
 if use_stacking:
-    generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
+    generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, k, save_path,
                           model_name, model)
 else:
     # 訓練模型

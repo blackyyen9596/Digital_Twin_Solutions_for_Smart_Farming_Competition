@@ -8,6 +8,9 @@ org_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\org'
 all_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\org\train-test.csv'
 save_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset_lstm'
 
+if not os.path.isdir(save_path):
+    os.mkdir(save_path)
+
 train_df = pd.read_csv(os.path.join(org_path, 'train_data.csv'), index_col=0)
 col_name = train_df.columns.to_list()
 
@@ -25,7 +28,7 @@ all_df['d.log_time'] = pd.to_datetime(all_df['d.log_time'])
 all_df.sort_values('d.log_time', inplace=True)
 all_df.to_csv(all_path, index=None)
 
-#正規化
+# 正規化
 data = all_df.iloc[:, 1:data_num]
 x_scaler = StandardScaler().fit(data)
 data = x_scaler.transform(data)

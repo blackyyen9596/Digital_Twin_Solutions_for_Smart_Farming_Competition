@@ -7,19 +7,12 @@ from sklearn.preprocessing import LabelEncoder
 
 def preprocessing():
     # 讀取資料集
-    read_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset_partition'
-    train_data = pd.read_csv(
-        os.path.join(read_path, 'train.csv'),
-        index_col=0,
-    )
-    val_data = pd.read_csv(
-        os.path.join(read_path, 'val.csv'),
-        index_col=0,
-    )
-    test_data = pd.read_csv(
-        os.path.join(read_path, 'test.csv'),
-        index_col=0,
-    )
+    read_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\dataset'
+    save_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
+
+    train_data = pd.read_csv(os.path.join(read_path, 'train.csv'), index_col=0)
+    val_data = pd.read_csv(os.path.join(read_path, 'val.csv'), index_col=0)
+    test_data = pd.read_csv(os.path.join(read_path, 'test.csv'), index_col=0)
     label_feature = [
         'actuator01', 'actuator02', 'actuator03', 'actuator04', 'actuator05',
         'actuator06', 'actuator07', 'actuator08', 'actuator09', 'actuator10',
@@ -28,8 +21,8 @@ def preprocessing():
     test_data[label_feature] = -1
     data = pd.concat((train_data, val_data, test_data)).reset_index(drop=True)
     month_list, time_list = [], []
-    for log_time in data['d.log_time']:
-        date = log_time.split()[0].split('/')
+    for log_time in data['d.log_time'].values:
+        date = log_time.split()[0].split('-')
         month = date[1]
         time = log_time.split()[1]
         month_list.append(month)
@@ -69,7 +62,10 @@ def preprocessing():
         int).reset_index(drop=True)
     val_label = train_val[label_feature][train_data.shape[0]:].astype(
         int).reset_index(drop=True)
-    save_path = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
+
+    if not os.path.isdir(save_path):
+        os.mkdir(save_path)
+
     train_data.to_csv(os.path.join(save_path, 'train_data.csv'))
     val_data.to_csv(os.path.join(save_path, 'val_data.csv'))
     test_data.to_csv(os.path.join(save_path, 'test_data.csv'))

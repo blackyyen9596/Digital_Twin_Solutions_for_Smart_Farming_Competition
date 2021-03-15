@@ -7,9 +7,18 @@ from sklearn.metrics import f1_score, hamming_loss
 from tqdm import tqdm
 
 
-def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
+def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, k, save_path,
                           model_name, model):
-    k = 100
+    # 建立資料夾
+    if not os.path.isdir('./stacking'):
+        os.mkdir('./stacking')
+    if not os.path.isdir('./stacking/train'):
+        os.mkdir('./stacking/train')
+    if not os.path.isdir('./stacking/val'):
+        os.mkdir('./stacking/val')
+    if not os.path.isdir('./stacking/test'):
+        os.mkdir('./stacking/test')
+
     kf = KFold(n_splits=k, shuffle=False)
     fold = 0
     train_list = []
@@ -17,7 +26,8 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
     xgb_train, xgb_val, xgb_test = {}, {}, {}
     with tqdm(kf.get_n_splits(train_x)) as pbar:
         for train_index, test_index in kf.split(train_x):
-            # print('train_index:%s , test_index: %s ' % (train_index, test_index))
+            # print('train_index:%s , test_index: %s ' %
+            #       (train_index, test_index))
             inputs = train_x[train_index]
             target = train_y[train_index]
             # 訓練模型
@@ -33,6 +43,7 @@ def generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, save_path,
             test_out = model.predict(test_x)
             test_dic[model_name + str(fold)] = test_out
             pbar.update(1)
+
     # 生成新的訓練集
     list = []
     for i in range(np.array(train_list).shape[1]):

@@ -3,8 +3,12 @@ import pandas as pd
 import os
 
 sets = ['train', 'val', 'test']
+
+if not os.path.isdir('./stacking/xgboost'):
+    os.mkdir('./stacking/xgboost')
+
 for set in sets:
-    file_path = os.path.join(r'D:\dataset\2021智慧農業數位分身創新應用競賽\stacking', set)
+    file_path = os.path.join(r'.\stacking', set)
     file_name = os.listdir(file_path)
 
     df1 = pd.read_csv(os.path.join(file_path, file_name[0]), index_col=0)
