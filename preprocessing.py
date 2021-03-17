@@ -20,14 +20,23 @@ def preprocessing():
     ]
     test_data[label_feature] = -1
     data = pd.concat((train_data, val_data, test_data)).reset_index(drop=True)
-    month_list, time_list = [], []
+    month_list, time_list, stage_list = [], [], []
     for log_time in data['d.log_time'].values:
-        date = log_time.split()[0].split('-')
-        month = date[1]
+        date_list = log_time.split()[0].split('-')
+        month = date_list[1]
+        date = date_list[0] + '-' + date_list[1] + '-' + date_list[2]
         time = log_time.split()[1]
         month_list.append(month)
         time_list.append(time)
-    data_new = {'month': month_list, 'time': time_list}
+        if date <= '2020-08-06':
+            stage_list.append(1)
+        elif date <= '2020-08-30':
+            stage_list.append(2)
+        elif date <= '2020-10-06':
+            stage_list.append(3)
+        elif date <= '2020-12-31':
+            stage_list.append(4)
+    data_new = {'month': month_list, 'time': time_list, 'stage': stage_list}
     data_new = pd.DataFrame(data_new).reset_index(drop=True)
     data = pd.concat([data, data_new], axis=1)
     data.drop(columns=['d.log_time'], axis=1, inplace=True)

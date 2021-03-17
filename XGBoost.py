@@ -66,7 +66,7 @@ test_pres.columns = [
     'actuator06', 'actuator07', 'actuator08', 'actuator09', 'actuator10',
     'actuator11'
 ]
-test_pres.to_csv(r'.\results\result_031521.csv')
+test_pres.to_csv(r'.\results\A0017_submission.csv')
 
 # 輸出模型評估指標
 print('f1_score:', round(f1_score(val_label, val_pred, average="macro"), 4))
