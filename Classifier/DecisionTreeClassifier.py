@@ -25,7 +25,7 @@ val_y = val_y.values
 
 # 設定參數
 model = DecisionTreeClassifier()
-k = 10
+k = 100
 
 if use_stacking:
     generate_stacking_csv(train_x, val_x, test_x, train_y, val_y, k, save_path,
