@@ -10,6 +10,9 @@ from sklearn.decomposition import PCA
 if not os.path.isdir('./results'):
     os.mkdir('./results')
 
+csv_file = r'.\stacking\xgboost'
+label_file = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
+
 args = {
     'learning_rate': 0.05,
     'n_estimators': 1000,
@@ -26,7 +29,7 @@ args = {
     'min_child_weight': 1,
     'reg_lambda': 0.1,
     'reg_alpha': 0,
-    'seed': 2021,
+    'seed': 2020,
     'nthread': 12,  # cpu 執行緒數 
     'tree_method': 'gpu_hist',
     'eval_metric': 'logloss',
@@ -35,8 +38,6 @@ args = {
 
 clf_multilabel = OneVsRestClassifier(XGBClassifier(**args))
 
-csv_file = r'.\stacking\xgboost'
-label_file = r'D:\dataset\2021智慧農業數位分身創新應用競賽\data_and_label'
 train_data = pd.read_csv(
     os.path.join(csv_file, 'train.csv'),
     index_col=0,
