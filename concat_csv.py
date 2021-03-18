@@ -18,6 +18,7 @@ for set in sets:
     df5 = pd.read_csv(os.path.join(file_path, file_name[4]), index_col=0)
     df6 = pd.read_csv(os.path.join(file_path, file_name[5]), index_col=0)
     df7 = pd.read_csv(os.path.join(file_path, file_name[6]), index_col=0)
+    df8 = pd.read_csv(os.path.join(file_path, file_name[7]), index_col=0)
 
-    data = pd.concat((df1, df2, df3, df4, df5, df6, df7), axis=1)
+    data = pd.concat((df1, df2, df3, df4, df5, df6, df7, df8), axis=1)
     data.to_csv(os.path.join(r'.\stacking\xgboost', str(set) + '.csv'))

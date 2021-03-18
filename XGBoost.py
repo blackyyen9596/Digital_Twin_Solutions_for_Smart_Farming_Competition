@@ -11,14 +11,20 @@ if not os.path.isdir('./results'):
     os.mkdir('./results')
 
 args = {
-    'learning_rate': 0.01,
+    'learning_rate': 0.05,
     'n_estimators': 1000,
     'booster': 'gbtree',
     'objective': 'reg:tweedie',
     'gamma': 0.1,
-    'max_depth': 6,
-    'min_child_weight': 5,
-    'reg_lambda': 0.2,
+    # 先調整 3, 5, 7, 9
+    # 如果 3 最好
+    # 再調整 2, 3, 4
+    'max_depth': 3,
+    # 先調整 1, 3, 5
+    # 如果 5 最好
+    # 再調整 4, 5, 6
+    'min_child_weight': 1,
+    'reg_lambda': 0.1,
     'reg_alpha': 0,
     'seed': 2021,
     'nthread': 12,  # cpu 執行緒數 
